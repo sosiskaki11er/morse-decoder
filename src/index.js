@@ -38,33 +38,36 @@ const MORSE_TABLE = {
 };
 
 function decode(expr) {
-        let lettersArr=expr.split('');
-    let morseLet=[];
-    let bitLet=[];
-    let result='';
-    for(let i=0;i<lettersArr.length;i++){
-        morseLet[i]=Object.keys(MORSE_TABLE).find(key=>MORSE_TABLE[key]===lettersArr[i]);
-    }
-    for(let j=0;j<morseLet.length;j++){
-        for(let k=0;k<morseLet[j].length;k++){
-            if(morseLet[j][k]==='.'){
-            bitLet[j]+='10'
-            }
-            if(morseLet[j][k]==='-'){
-            bitLet[j]+='11'
-            }
-        }
-    }
-    for(let i=0;i<bitLet.length;i++){
-        bitLet[i]=bitLet[i].slice(9)
-        while(bitLet[i].length<10){
-            bitLet[i]='0'+bitLet[i]
-            }
-    }
-    for(let k=0;k<bitLet.length;k++){
-        result+=bitLet[k]
-    }
-    return result
+	let result = ''
+	let array = ''
+	let string = ''
+	let arrResult
+	for (let i = 0; i < expr.split('').length; i = i + 10) {
+		let arr10 = expr.slice(i, i + 10).split('')
+		if (arr10.join('') === '**********') {
+			result += ' '
+			string = ''
+		} else {
+			for (let j = 0; j < 10; j = j + 2) {
+				if (arr10[j] > 0) {
+					arrResult = arr10[j] + arr10[j + 1]
+					if (arrResult === '10') {
+						array += '.'
+					} else {
+						array += '-'
+					}
+				}
+				for (var key in MORSE_TABLE) {
+					if (key === array) {
+						string = MORSE_TABLE[key]
+					}
+				}
+			}
+		}
+		result += string
+		array = ''
+	}
+	return result
 }
 
 module.exports = {
